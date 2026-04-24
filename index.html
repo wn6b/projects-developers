@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Portal — Projects Developers</title>
+  <link rel="stylesheet" href="dev-style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<div id="loader" class="loader-screen">
+  <div class="loader-bg"></div>
+  <div class="loader-content">
+    <div class="loader-logo-svg">
+      <svg viewBox="0 0 100 100" class="advanced-logo" width="90" height="90">
+        <defs>
+          <linearGradient id="gradDev" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:var(--accent3);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:var(--accent);stop-opacity:1" />
+          </linearGradient>
+          <filter id="glowDev" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+        <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" fill="none" stroke="url(#gradDev)" stroke-width="3" class="hex-path"></polygon>
+        <path d="M35,50 L50,25 L65,50 L50,75 Z" fill="url(#gradDev)" filter="url(#glowDev)" class="inner-core"></path>
+      </svg>
+    </div>
+    <div class="loader-brand">Developers Portal</div>
+    <div class="loader-sub">Advanced Submission System</div>
+    <div class="loader-bar-wrap">
+      <div class="loader-bar" id="loaderBar"></div>
+    </div>
+    <div class="loader-status" id="loaderStatus">Booting Developer Environment...</div>
+    <div class="loader-dots">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+  <div class="loader-grid"></div>
+  <div class="loader-particles" id="loaderParticles"></div>
+</div>
+
+<div id="authScreen" class="auth-screen">
+  <div class="auth-bg">
+    <div class="auth-gradient"></div>
+    <canvas id="authCanvas"></canvas>
+  </div>
+  
+  <div class="auth-panel">
+    <div class="auth-panel-inner">
+      <div class="auth-logo">
+        <div class="auth-logo-icon">
+          <svg viewBox="0 0 50 50" width="40" height="40">
+            <polygon points="25,2 48,14 48,36 25,48 2,36 2,14" fill="none" stroke="var(--accent3)" stroke-width="2"></polygon>
+            <path d="M15,25 L25,10 L35,25 L25,40 Z" fill="var(--accent)"></path>
+          </svg>
+        </div>
+        <div class="auth-logo-text">
+          <div class="alt-main">Projects Developers</div>
+          <div class="alt-sub">Engineering the Future</div>
+        </div>
+      </div>
+
+      <div class="auth-intro">
+        <h2>انضم لنخبة المطورين</h2>
+        <p>قدم طلبك الآن ليتم مراجعته بواسطة الـ AI. بعد القبول، ستتمكن من رفع مشاريعك مباشرة إلى المنصة الأساسية.</p>
+      </div>
+
+      <div id="devApplicationForm" class="auth-form active">
+        <div class="field-group">
+          <label>الاسم البرمجي (Alias)</label>
+          <div class="field-wrap">
+            <input type="text" id="devName" placeholder="مثلاً: Wano" />
+            <div class="field-glow"></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>البريد الإلكتروني الرسمي</label>
+          <div class="field-wrap">
+            <input type="email" id="devEmail" placeholder="dev@example.com" />
+            <div class="field-glow"></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>تخصصك الأساسي</label>
+          <div class="field-wrap">
+            <select id="devSkill">
+              <option value="bot_dev">Bot Developer (JS Only)</option>
+              <option value="web_dev">Web Developer</option>
+              <option value="full_stack">Full Stack Engineer</option>
+              <option value="security">Security Researcher</option>
+            </select>
+            <div class="field-glow"></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>لماذا تريد الانضمام؟ (سيتم تحليله بواسطة AI)</label>
+          <div class="field-wrap">
+            <textarea id="devReason" placeholder="اشرح خبرتك والمشاريع التي تنوي تقديمها..." rows="3"></textarea>
+            <div class="field-glow"></div>
+          </div>
+        </div>
+
+        <div class="ai-think" id="aiThink">
+          <div class="ai-think-dot"></div>
+          <span id="aiThinkText">AI يحلل طلب الانضمام...</span>
+        </div>
+
+        <button class="auth-btn" id="applyBtn" onclick="handleDevApplication()">
+          <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب للمراجعة</span>
+          <div class="btn-loader hidden"></div>
+        </button>
+
+        <div class="auth-error hidden" id="applyError"></div>
+        <div class="auth-success hidden" id="applySuccess"></div>
+      </div>
+
+      <div class="auth-footer">
+        <div class="footer-links">
+          <a href="https://wn6b.github.io/WanoHost" target="_blank"><i class="fa-solid fa-house"></i> الموقع الأساسي</a>
+          <a href="https://github.com/wn6b" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
+        </div>
+        <p>© 2026 Projects Developers — وائل | Wano</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="devDash" class="dashboard hidden">
+  <aside class="sidebar" id="devSidebar">
+    <div class="sidebar-logo">
+      <div class="sl-icon">
+        <svg viewBox="0 0 50 50" width="25" height="25">
+          <polygon points="25,2 48,14 48,36 25,48 2,36 2,14" fill="none" stroke="white" stroke-width="3"></polygon>
+        </svg>
+      </div>
+      <div class="sl-text">
+        <span>Dev Portal</span>
+        <small>Verified Developer</small>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="snav-item active" onclick="showDevSection('dsecSubmit', this)">
+        <span class="snav-icon"><i class="fa-solid fa-code-commit"></i></span> تقديم مشروع
+      </a>
+      <a href="#" class="snav-item" onclick="showDevSection('dsecStatus', this)">
+        <span class="snav-icon"><i class="fa-solid fa-list-check"></i></span> حالة المشاريع
+      </a>
+      <a href="https://wn6b.github.io/WanoHost" class="snav-item">
+        <span class="snav-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span> العودة للموقع الأساسي
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="su-avatar" id="devDisplayPfp"><i class="fa-solid fa-user-ninja"></i></div>
+        <div class="su-info">
+          <span class="su-name" id="devDisplayName">Developer</span>
+          <span class="su-role" style="color:var(--accent)"><i class="fa-solid fa-check-double"></i> Verified</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="dash-main">
+    <header class="dash-header">
+      <button class="menu-toggle" onclick="toggleDevSidebar()"><i class="fa-solid fa-bars"></i></button>
+      <div class="dash-header-title" id="devPageTitle">تقديم مشروع جديد</div>
+      <div class="dash-header-actions">
+        <div class="ai-status deep-scan"><div class="ai-dot"></div> Deep AI Scan Active</div>
+      </div>
+    </header>
+
+    <section id="dsecSubmit" class="dash-section active">
+      <div class="welcome-hero dev-hero">
+        <div class="wh-text">
+          <h1>مرحباً بك في المختبر البرمجي 🧪</h1>
+          <p>هنا يتم فحص المشاريع بأقوى تقنيات الـ AI لضمان جودة وأمان كود المنصة.</p>
+        </div>
+      </div>
+
+      <div class="upload-grid">
+        <div class="upload-card dev-card">
+          <h3><i class="fa-solid fa-file-signature"></i> تفاصيل المشروع</h3>
+          <div class="field-group">
+            <label>عنوان البرمجية</label>
+            <div class="field-wrap">
+              <input type="text" id="devProjName" placeholder="اسم البوت أو الموقع" />
+              <div class="field-glow"></div>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>شرح التقنيات المستخدمة</label>
+            <div class="field-wrap">
+              <textarea id="devProjStack" placeholder="مثلاً: JavaScript, Firebase, Discord.js v14..." rows="2"></textarea>
+              <div class="field-glow"></div>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>ملف المشروع (سورس كود)</label>
+            <div class="drop-zone" id="devDropZone" onclick="document.getElementById('devFileInput').click()">
+              <div class="dz-icon"><i class="fa-solid fa-file-shield"></i></div>
+              <div class="dz-text">ارفع السورس كود للفحص العميق</div>
+              <input type="file" id="devFileInput" hidden onchange="handleDevFileSelect(this)" />
+            </div>
+            <div class="file-preview hidden" id="devFilePreview">
+              <div class="fp-icon"><i class="fa-solid fa-code"></i></div>
+              <div class="fp-info"><span id="dfpName">-</span><span id="dfpSize">-</span></div>
+              <button onclick="clearDevFile()"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+          </div>
+          <button class="auth-btn" onclick="startDeepScan()" id="devSubmitBtn">
+            <span class="btn-text"><i class="fa-solid fa-microchip"></i> بدء الفحص والنشر</span>
+            <div class="btn-loader hidden"></div>
+          </button>
+        </div>
+
+        <div class="terminal-card">
+          <div class="scan-terminal deep-terminal">
+            <div class="st-header">
+              <span class="st-dot r"></span><span class="st-dot y"></span><span class="st-dot g"></span>
+              <span class="st-title">DEEP AI KERNEL SCANNER v4.0</span>
+            </div>
+            <div class="st-body" id="devStBody">
+              <div class="st-line"><span class="st-prompt">#</span> <span class="st-wait">بانتظار رفع الملف...</span></div>
+            </div>
+          </div>
+          <div class="scan-metrics">
+            <div class="metric"><span>Security Score:</span> <strong id="mSecurity">0%</strong></div>
+            <div class="metric"><span>Code Quality:</span> <strong id="mQuality">0%</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dsecRedirect" class="dash-section">
+      <div class="redirect-card">
+        <div class="rc-icon-wrap">
+          <svg viewBox="0 0 100 100" width="120" height="120">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="var(--green)" stroke-width="2" class="draw-circle"></circle>
+            <path d="M30,50 L45,65 L70,35" fill="none" stroke="var(--green)" stroke-width="5" stroke-linecap="round" class="draw-check"></path>
+          </svg>
+        </div>
+        <h1>تهانينا! أنت الآن مطور رسمي</h1>
+        <p>تمت الموافقة على انضمامك بواسطة الـ AI. سيتم نقلك الآن إلى الموقع الأساسي لتسجيل الدخول وبدء العمل.</p>
+        <div class="redirect-timer">سيتم التحويل خلال <span id="rTimer">5</span> ثوانٍ...</div>
+        <button class="auth-btn" onclick="redirectToMain()">انتقل الآن <i class="fa-solid fa-arrow-left"></i></button>
+      </div>
+    </section>
+  </main>
+</div>
+    <section id="dsecStatus" class="dash-section">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-list-check"></i> حالة مشاريعك المرفوعة</h2>
+      </div>
+      <div class="status-container">
+        <div class="status-card">
+          <div class="sc-info">
+            <div class="sc-icon pending"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div class="sc-details">
+              <strong>قيد المراجعة العميقة</strong>
+              <span>يتم الآن تحليل الكود بحثاً عن أي ثغرات أو أخطاء.</span>
+            </div>
+          </div>
+          <div class="sc-badge">Pending AI</div>
+        </div>
+        
+        <div id="devProjectsList" class="dev-projects-list">
+          <div class="empty-state">
+            <div class="es-icon"><i class="fa-solid fa-diagram-project"></i></div>
+            <div class="es-text">لم تقم برفع أي مشروع بعد.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="notif-panel hidden" id="devNotifPanel" onclick="hideDevNotif()">
+  <div class="np-inner" onclick="event.stopPropagation()">
+    <div class="np-header"><i class="fa-solid fa-bell"></i> تنبيهات المطورين</div>
+    <div id="devNotifList" class="np-list">
+      <div class="np-empty">لا توجد تنبيهات جديدة</div>
+    </div>
+  </div>
+</div>
+
+<script src="dev-script.js"></script>
+
+</body>
+</html>
